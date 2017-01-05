@@ -1,4 +1,4 @@
-package: github.com/GannettDigital/go-swagger-microservice-skeleton
+package: github.com/GannettDigital/{NAME}
 import:
 - package: github.com/go-openapi/swag
 - package: github.com/go-openapi/runtime

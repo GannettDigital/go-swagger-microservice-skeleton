@@ -2,15 +2,13 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: go-swagger-microservice-skeleton
+  title: {NAME}
   description: |
     #### Echos back every URL, method, parameter and header
     Feel free to make a path or an operation and use **Try Operation** to test it. The echo server will
     render back everything.
 schemes:
   - http
-host: mazimi-prod.apigee.net
-basePath: /echo
 paths:
   /:
     get:
