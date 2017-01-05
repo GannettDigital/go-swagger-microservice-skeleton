@@ -1,0 +1,7 @@
+package: github.com/GannettDigital/go-swagger-microservice-skeleton
+import:
+- package: github.com/go-openapi/swag
+- package: github.com/go-openapi/runtime
+- package: github.com/tylerb/graceful
+- package: github.com/jessevdk/go-flags
+- package: golang.org/x/net/context
