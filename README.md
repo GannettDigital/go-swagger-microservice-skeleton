@@ -60,6 +60,7 @@ Use the following commands to install boilr and the template
 To build and run the echo service do the following:
 
 ``` shell
+    $ cd my-echo-service
     $ make # builds and runs test suite
     $ make run # starts the web service on port :8080
 ```
