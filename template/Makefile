@@ -1,4 +1,4 @@
-PROJECT=$$(basename $$(pwd))
+PROJECT={{ Name }}
 
 BUILD_DEPS=golang.org/x/tools/cmd/cover \
 	github.com/Masterminds/glide \
