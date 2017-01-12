@@ -15,6 +15,19 @@ Use the following commands to install boilr and the template
 
 # Generation
 
+## Variables
+
+<dl>
+<dt>Name</dt>
+<dd>A short name for the service.  It must be a valid go variable name</dd>
+<dt>CamelName</dt>
+  <dd>A capitalized camel case version of Name</dd>
+<dt>Description
+  <dd>A description of the service</dd>
+<dt>Version
+  <dd>The initial version of the service</dd>
+</dl>
+
 ``` shell
     $ cd $GOPATH/src/github.com/GannettDigital
     $ boilr template use swagger-microservice my-echo-service
@@ -32,17 +45,6 @@ Use the following commands to install boilr and the template
     [✔] Created swagger.yaml
     [✔] Successfully executed the project template swagger-microservice in /Users/emoritz/work/src/github.com/GannettDigital/my-echo-service
 ```
-
-## Variables
-
-Name
-  A short name for the service.  It must be a valid go variable name
-CamelName
-  A capitalized camel case version of Name
-Description
-  A description of the service
-Version
-  The initial version of the service
 
 # Running the echo service
 
