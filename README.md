@@ -20,13 +20,13 @@ Use the following commands to install boilr and the template
 <dl>
 
 <dt>RepoName</dt>
-<dd>The name of the repository, i.e. github.com/GannettDigital/{{ RepoName }}.<dd>
+<dd>The name of the repository, i.e. github.com/GannettDigital/{{ RepoName }}.</dd>
 
-<dt>ShortName</dt>
-<dd>A short, one word name for the service.  It must be a valid go variable name</dd>
+<dt>SnakeName</dt>
+<dd>A [snake case](https://en.wikipedia.org/wiki/Snake_case) version of the RepoName</dd>
 
 <dt>CamelName</dt>
-<dd>A capitalized camel case version of ShortName</dd>
+<dd>A capitalized [camel case](https://en.wikipedia.org/wiki/Camel_case) version of RepoName</dd>
 
 <dt>Description
 <dd>A description of the service</dd>
@@ -39,6 +39,20 @@ Use the following commands to install boilr and the template
 ``` shell
     $ cd $GOPATH/src/github.com/GannettDigital
     $ boilr template use swagger-microservice my-echo-service
+    [?] Please choose a value for "RepoName" [default: "echo-service"]: my-echo-service
+    [?] Please choose a value for "Version" [default: "1.0.0"]:
+    [✔] Created CHANGELOG.md
+    [✔] Created Makefile
+    [?] Please choose a value for "Description" [default: "A generic echo service"]:
+    [✔] Created README.md
+    [✔] Created config/config.go
+    [✔] Created glide.yaml
+    [✔] Created swag/Makefile
+    [?] Please choose a value for "SnakeName" [default: "echo_service"]: my_echo_service
+    [?] Please choose a value for "CamelName" [default: "EchoService"]: MyEchoService
+    [✔] Created swag/restapi/configure_my_echo_service.go
+    [✔] Created swagger.yaml
+    [✔] Successfully executed the project template swagger-microservice in /Users/emoritz/work/src/github.com/GannettDigital/my-echo-service
 ```
 
 # Running the echo service
