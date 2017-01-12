@@ -1,4 +1,4 @@
-PROJECT={{ Name }}
+REPO=$$(basename $$(pwd))
 
 BUILD_DEPS=golang.org/x/tools/cmd/cover \
 	github.com/Masterminds/glide \
@@ -34,8 +34,8 @@ clean:
 	@make -C swag clean
 
 run:
-	go install ./swag/cmd/${PROJECT}-server/
-	${PROJECT}-server --port 8000
+	go install ./swag/cmd/${REPO}-server/
+	${REPO}-server --port 8000
 
 test: vet lint
 	go test $$(glide novendor)

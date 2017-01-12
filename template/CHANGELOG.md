@@ -1,8 +1,8 @@
-{{ Name }} CHANGELOG
+{{ RepoName }} CHANGELOG
 ==============================
 
-This file is used to list changes made in each version of {{ Name }}
+This file is used to list changes made in each version of {{ RepoName }}
 
 # {{ Version }}
 
-{{ Name }} - initial commit of {{ Name }}
+{{ RepoName }} - initial commit of {{ RepoName }}

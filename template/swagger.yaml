@@ -1,10 +1,10 @@
 swagger: "2.0"
 info:
   version: 0.0.1
-  title: {{ Name }}
+  title: {{ SnakeName }}
   description: {{ Description }}
 externalDocs:
-  url: "https://github.com/GannettDigital/{{ Name }}"
+  url: "https://github.com/GannettDigital/{{ RepoName }}"
 produces:
   - application/json
 consumes:

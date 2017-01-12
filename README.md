@@ -18,32 +18,27 @@ Use the following commands to install boilr and the template
 ## Variables
 
 <dl>
-<dt>Name</dt>
-<dd>A short name for the service.  It must be a valid go variable name</dd>
+
+<dt>RepoName</dt>
+<dd>The name of the repository, i.e. github.com/GannettDigital/{{ RepoName }}.<dd>
+
+<dt>ShortName</dt>
+<dd>A short, one word name for the service.  It must be a valid go variable name</dd>
+
 <dt>CamelName</dt>
-  <dd>A capitalized camel case version of Name</dd>
+<dd>A capitalized camel case version of ShortName</dd>
+
 <dt>Description
-  <dd>A description of the service</dd>
+<dd>A description of the service</dd>
+
 <dt>Version
-  <dd>The initial version of the service</dd>
+<dd>The initial version of the service</dd>
+
 </dl>
 
 ``` shell
     $ cd $GOPATH/src/github.com/GannettDigital
     $ boilr template use swagger-microservice my-echo-service
-    [?] Please choose a value for "Name" [default: "echo"]: echo
-    [?] Please choose a value for "Version" [default: "1.0.0"]:
-    [✔] Created CHANGELOG.md
-    [✔] Created Makefile
-    [?] Please choose a value for "Description" [default: "A generic echo service"]:
-    [✔] Created README.md
-    [✔] Created config/config.go
-    [✔] Created glide.yaml
-    [✔] Created swag/Makefile
-    [?] Please choose a value for "CamelName" [default: "Echo"]: MyEchoService
-    [✔] Created swag/restapi/configure_echo.go
-    [✔] Created swagger.yaml
-    [✔] Successfully executed the project template swagger-microservice in /Users/emoritz/work/src/github.com/GannettDigital/my-echo-service
 ```
 
 # Running the echo service

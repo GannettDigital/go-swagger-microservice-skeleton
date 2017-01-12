@@ -1,6 +1,7 @@
 {
-    "Name": "echo",
-    "CamelName": "Echo",
+    "RepoName": "echo-service",
+    "SnakeName": "echo_service",
+    "CamelName": "EchoService",
     "Description": "A generic echo service",
     "Version": "1.0.0"
 }
