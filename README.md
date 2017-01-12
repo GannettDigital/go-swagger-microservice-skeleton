@@ -23,10 +23,10 @@ Use the following commands to install boilr and the template
 <dd>The name of the repository, i.e. github.com/GannettDigital/{{ RepoName }}.</dd>
 
 <dt>SnakeName</dt>
-<dd>A [snake case](https://en.wikipedia.org/wiki/Snake_case) version of the RepoName</dd>
+<dd>A <a href="https://en.wikipedia.org/wiki/Snake_case">snake case</a> version of the RepoName</dd>
 
 <dt>CamelName</dt>
-<dd>A capitalized [camel case](https://en.wikipedia.org/wiki/Camel_case) version of RepoName</dd>
+<dd>A capitalized <a href="https://en.wikipedia.org/wiki/Camel_case">camel case</a> version of RepoName</dd>
 
 <dt>Description
 <dd>A description of the service</dd>
@@ -76,7 +76,7 @@ replace.
 Start by altering the `swagger.yaml` to fit the resources required by
 your service.
 
-You will need to delete the `swag/restapi/configure_echo.go` to allow
+You will need to delete the `swag/restapi/configure_*.go` to allow
 go-swagger to regenerate it based on your new swagger.yaml file.
 
 ``` shell
