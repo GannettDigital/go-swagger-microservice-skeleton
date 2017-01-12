@@ -76,8 +76,8 @@ replace.
 Start by altering the `swagger.yaml` to fit the resources required by
 your service.
 
-You will need to delete the `swag/restapi/configure_echo.go` to allow
-go-swagger to regenerate it based on your new swagger.yaml file.
+You will need to delete the `swag/restapi/configure_*.go` file to
+allow go-swagger to regenerate it based on your new swagger.yaml file.
 
 ``` shell
     $ rm swag/restapi/configure_*.go
@@ -85,4 +85,10 @@ go-swagger to regenerate it based on your new swagger.yaml file.
     $ make # build and tests the project
 ```
 
-go-swagger created a brand new dummy service for your `swagger.yaml`.
+This project encourages you to move your handlers and middleware setup
+out of the `configure_*.go` file and into the `handlers/` package.
+
+If you significantly change your `swagger.yaml` file you may need to
+delete the `configure_*.go` files and have go-swagger regenerate it.
+In this event, you'll want the changes to `configure_*.go` to be
+minimal.
