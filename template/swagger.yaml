@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  version: 0.0.1
+  title: {{ Name }}
+  description: {{ Description }}
+externalDocs:
+  url: "https://github.com/GannettDigital/{{ Name }}"
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  "/":
+    parameters:
+      - name: url
+        description: The URL for
+        in: query
+        required: true
+        type: string
+    get:
+      operationId: GetOEmbed
+      summary: And OEmbed for this service
+      responses:
+        200:
+          description: The NavItem for a topic page
+          schema:
+            $ref: "#/definitions/OEmbed"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+  OEmbed:
+    type: object
+    properties:
+      type:
+        type: string
+        description: |
+          The resource type. Valid values, along with value-specific
+          parameters, are described below.
+      version:
+        type: string
+        description: |
+          The oEmbed version number. This must be 1.0.
+      html:
+        type: string
+        description: |
+          The HTML required to embed a video player. The HTML should
+          have no padding or margins. Consumers may wish to load the
+          HTML in an off-domain iframe to avoid XSS vulnerabilities.
+      cache_age:
+        type: integer
+        description: |
+          The suggested cache lifetime for this resource, in
+          seconds. Consumers may choose to use this value or not.

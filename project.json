@@ -1,0 +1,6 @@
+{
+    "Name": "echo",
+    "CamelName": "Echo",
+    "Description": "A generic echo service",
+    "Version": "1.0.0"
+}
