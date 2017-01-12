@@ -1,7 +1,7 @@
 # go-swagger-microservice-skeleton
 
 This is a [boilr](https://github.com/tmrts/boilr) template for
-generating a [goswagger](https://goswagger.io/) based microservice.
+generating a [go-swagger](https://goswagger.io/) based microservice.
 
 # Installation
 
