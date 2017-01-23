@@ -1,0 +1,123 @@
+build:
+  install:
+    image: $$DOCKER_REG/golang/debian
+    commands:
+      - make
+    when:
+      branch: ["master"]
+
+  pull-request:
+    image: $$DOCKER_REG/golang/debian
+    commands:
+      - make
+    when:
+      event: "pull_request"
+
+  test-build:
+    image: $$DOCKER_REG/golang/debian
+    commands:
+      - go build ./swag/cmd/$(basename $(pwd))-server
+    when:
+      branch: ["master"]
+      success: true   
+
+  tag:
+    image: $$DOCKER_REG/drone/bumpit
+    pull: true
+    environment:
+      DRONE_DSN: $$DRONE_DSN
+      BUMPIT_ADD_BUILD_TAG: "true"
+    commands:
+      - /opt/entrypoint.sh
+      - cat ./version.json
+    when:
+      branch: ["master", "preprod", "dev"]
+      success: true
+
+  bundle:
+    image: $$DOCKER_REG/golang/debian
+    commands:
+      - "go build -o ./$(basename $(pwd))-${DRONE_BRANCH} -ldflags \"-X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.appName=${DRONE_REPO} -X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.version=$(jq -r .versionWithoutBuild version.json) -X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.ciJobNumber=$$BUILD_NUMBER -X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.commit=$$COMMIT -X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.builtOn=${CI_NAME} -X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.builtBy=$(jq -r .author version.json) -X github.com/${DRONE_REPO}/vendor/github.com/GannettDigital/goStateModule.builtAt=$(jq -r .buildDate version.json)\" ./swag/cmd/$(basename $(pwd))-server"
+
+    when:
+      branch: ["master"]
+      success: true
+
+
+  build-docker-paas-centos:
+    image: $$DOCKER_REG/docker/buildpack-deps
+    pull: true
+    privileged: true
+    environment:
+      DOCKER_HOST: 127.0.0.1
+    volumes:
+      - /opt/gannett/drone-docker-cache:/opt/gannett/drone-docker-cache
+    commands:
+      - if [ ! -d /opt/gannett/drone-docker-cache/${DRONE_REPO} ]; then mkdir -p /opt/gannett/drone-docker-cache/${DRONE_REPO}; fi
+      - if [ -f /opt/gannett/drone-docker-cache/${DRONE_REPO}/${DRONE_BRANCH}.tar.gz ]; then docker load --quiet --input /opt/gannett/drone-docker-cache/${DRONE_REPO}/${DRONE_BRANCH}.tar.gz; fi
+      - docker login --username $$DOCKER_REG_USER --password "$$DOCKER_REG_PWD" $$DOCKER_REG
+      - docker build --pull --build-arg BRANCH=${DRONE_BRANCH} --file ./docker/paas-centos/Dockerfile --tag "$$DOCKER_REG/$(basename $(pwd)):latest" --tag "$$DOCKER_REG/$(basename $(pwd)):$(jq -r .versionWithoutBuild version.json)" .
+      - docker push $$DOCKER_REG/$(basename $(pwd)):latest
+      - docker push $$DOCKER_REG/$(basename $(pwd)):$(jq -r .versionWithoutBuild version.json)
+      - docker save -o /opt/gannett/drone-docker-cache/${DRONE_REPO}/${DRONE_BRANCH}.tar.gz $$DOCKER_REG/$(basename $(pwd)):latest paas-docker-artifactory.gannettdigital.com/paas-centos7-base:latest
+    when:
+      branch: ["master"]
+      success: true
+
+  docker-deploy:
+    image: $$DOCKER_REG/drone/deploy
+    pull: true
+    commands:
+      - export GLOBAL_SCALR_ENVIRONMENT=$(jq -r .[].deployments[0].input.scalr.farm.environment .deployment.docker.$$BRANCH.json)
+      - export DEPLOY_IMAGE_NAME=$$DOCKER_REG/$(basename $(pwd)):$(jq -r .versionWithoutBuild version.json)
+      - drone-deploy --polling-period 20s --config ./.deployment.docker.$$BRANCH.json deploy --new-version $(jq -r .versionWithBuild version.json)
+    environment:
+      DEPLOY_SCALR_API_ACCESS: $$SCALR_V2_API_KEY
+      DEPLOY_SCALR_API_SECRET: $$SCALR_V2_SECRET_KEY
+      DEPLOY_API_KEY: $$TYK_API_KEY
+      DEPLOY_DOCKER: "true"
+      DEPLOY_KUBE_API_USER: "derp"
+      DEPLOY_KUBE_API_TOKEN: "derp"
+      DEPLOY_NEWRELIC_KEY: $$NEWRELIC_LICENSE_KEY
+      DEPLOY_DATADOG_API_KEY: $$DATADOG_API_KEY
+    when:
+      branch: ["master", "dev"]
+      success: true
+
+compose:
+  #Service container for building Docker images
+  dind:
+    image: docker:1.12-dind
+    privileged: true
+
+notify:
+  slack:
+    webhook_url: https://hooks.slack.com/services/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
+    channel: drone
+    username: drone
+    when:
+      success: false
+      event: pull_request
+    template: >
+        Fail: Build of <http://1347-5315-scalr.tools.gannettdigital.com/{{repo.owner}}/{{repo.name}}/{{build.number}}|{{build.branch}}> by <{{build.link_url}}|{{build.author}}> for <{{repo.link_url}}|{{repo.owner}}/{{repo.name}}> :skull:
+  slack:
+    webhook_url: https://hooks.slack.com/services/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
+    channel: drone
+    username: drone
+    when:
+      success: false
+      branch: ["master", "dev", "preprod"]
+    template: >
+        Fail: Build of <http://1347-5315-scalr.tools.gannettdigital.com/{{repo.owner}}/{{repo.name}}/{{build.number}}|{{build.branch}}> by <{{build.link_url}}|{{build.author}}> for <{{repo.link_url}}|{{repo.owner}}/{{repo.name}}> :skull:
+  slack:
+    webhook_url: https://hooks.slack.com/services/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
+    channel: drone
+    username: drone
+    template: >
+      {{#success build.status}}
+        Success: Deployment from <{{repo.link_url}}|{{repo.owner}}/{{repo.name}}> to <http://1347-5315-scalr.tools.gannettdigital.com/{{repo.owner}}/{{repo.name}}/{{build.number}}|{{build.branch}}> :partyparrot:
+      {{else}}
+        Fail: Deployment from <{{repo.link_url}}|{{repo.owner}}/{{repo.name}}> to <http://1347-5315-scalr.tools.gannettdigital.com/{{repo.owner}}/{{repo.name}}/{{build.number}}|{{build.branch}}> :fire:
+      {{/success}}
+    when:
+      branch: ["master", "dev", "preprod"]

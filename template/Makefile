@@ -3,7 +3,7 @@ REPO=$$(basename $$(pwd))
 BUILD_DEPS=golang.org/x/tools/cmd/cover \
 	github.com/Masterminds/glide \
 	github.com/golang/lint/golint \
-	github.com/go-swagger/go-swagger/cmd/swagger \
+	github.com/GannettDigital/go-swagger/cmd/swagger \
 	github.com/go-openapi/runtime
 
 
@@ -25,7 +25,7 @@ deps:
 	glide install
 
 swag:
-	swagger generate server -t swag
+	swagger generate server -t swag swagger.yaml
 	# If you need to build a swagger client, do the following:
 	# swagger generate client -t swag/backend -f taxo.swagger.yaml -A taxo -c taxo
 
